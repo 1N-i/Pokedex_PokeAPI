@@ -1,12 +1,12 @@
-
+from pokemon import id_or_name
 
 while True:
-    print("Select: \n1- Search by name or ID")
+    print("\nSelect: \n1- Search by name or ID")
     print("2- Search hability \n3- Search by type \n4- Finish Program \n")
     options = [1, 2, 3, 4]
 
     try:
-        e = int(input("Action: "))
+        e = 1 #test_mode --------------------------- #e = int(input("Action: "))
         if e not in options:
             raise ValueError
 
@@ -15,7 +15,8 @@ while True:
         continue
 
     if e == 1: #Search Pokémon by name or ID
-        pass
+        search = input("Name or ID: ")
+        id_or_name(search)
 
     if e == 2: #Search specific hability
         pass
