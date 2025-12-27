@@ -1,8 +1,8 @@
 import requests
 
 def id_or_name(search):
-    url_busca = f"https://pokeapi.co/api/v2/pokemon/{search}" #Link PokeAPI
-    requested = requests.get(url_busca)
+    url_search = f"https://pokeapi.co/api/v2/pokemon/{search}" #Link PokeAPI
+    requested = requests.get(url_search)
     if requested.status_code == 404:
         print(f"Error: '{search}' not found") #Finish if nothing was found
         return
