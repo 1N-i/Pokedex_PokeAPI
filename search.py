@@ -40,7 +40,7 @@ def search_id_or_name(search): #Search Pokémon by name or ID
         print(f"Type: {type2}")
 
     while True:
-        print("\nSelect: \n1- See moves \n2- See abilities \n3- End search")
+        print("\nSelect: \n1- See moves \n2- See abilities \n3- End search\n")
         action = data_verification([1, 2, 3])
 
         if action == 1: #Show moves
@@ -59,29 +59,62 @@ def search_id_or_name(search): #Search Pokémon by name or ID
 
 #-------------------------------------------------------------
 def search_type(search): #Search specific type
-    search = search_message = search.lower()
+    search = search.lower()
     data = create_data("type", search)
     if data == "error":
         return
 
     while True:
-        print(f"\nSelect: \n1- See {search_message} type pokémon \n2- See {search_message} type moves")
-        print(f"3- See {search_message} type chart \n4- End search")
-        action = data_verification([1, 2, 3, 4])
+        print(f"\nSelect: \n1- See all {search} type pokémon \n2- See {search}:type pokémon")
+        print(f"3- See {search} type moves \n4- See {search} type chart \n5- End search\n")
+        action = data_verification([1, 2, 3, 4, 5])
 
         if action == 1: #See pokémon
-            print(f"\n{search_message} type pokémon:")
+            print(f"\n{search} type pokémon:")
             for pokemon in data["pokemon"]:
                 print(pokemon["pokemon"]["name"])
 
-        if action == 2: #See types
-            pass
+        if action == 2: #Search with secondary type
+            def pokemon_list():
+                type_list = []
+                for pokemon in data["pokemon"]:
+                    type_list.append(pokemon["pokemon"]["name"])
+                return type_list
 
-        if action == 3: #See type chart
-            pass
+            type1 = pokemon_list()
 
-        if action == 4: #End search
-            print(f"Ending search on '{search_message}'")
+            search2 = input("\nType: ")
+            data = create_data("type", search2)
+            if data == "error":
+                search_type(search)
+                return
+            
+            type2 = pokemon_list()
+
+            print(f"{search}:{search2} pokémon:")
+            for a in type1:
+                for b in type2:
+                    if a == b:
+                        print(b)
+            
+        if action == 3: #See moves
+            for move in data["moves"]:
+                print(move["name"])
+
+        if action == 4: #See type chart
+            def chart(text):
+                list = []
+
+                for type in data["damage_relations"][text]:
+                    list.append(type["name"])
+                return list
+
+            print(f"2x damage from-to:\n{chart("double_damage_from")} -> {search} -> {chart("double_damage_to")}\n")
+            print(f"1/2x damage from-to:\n{chart("half_damage_from")} -> {search} -> {chart("half_damage_to")}\n")
+            print(f"0x damage from-to:\n{chart("no_damage_from")} -> {search} -> {chart("no_damage_to")}")
+
+        if action == 5: #End search
+            print(f"Ending search on '{search}'")
             break
 
 #-------------------------------------------------------------
@@ -90,11 +123,14 @@ def search_move(search): #Search a move
     if data == "error":
         return
     
+    #Data Verification
+
     #To Do
+    pass
 
 #-------------------------------------------------------------
 def search_ability(search):  #Search ability
-    search = search_message = search.lower()
+    search = src_msg = search.lower()
     search = search.replace(" ", "-")
 
     data = create_data("ability", search)
@@ -107,20 +143,20 @@ def search_ability(search):  #Search ability
             print(f"\nShort version: \n{ability["short_effect"].replace("\n\n", "\n")}")
 
     while True:
-        print("\nSelect: \n1- See Pokémon with this ability \n2- End search")
+        print("\nSelect: \n1- See Pokémon with this ability \n2- End search\n")
         action = data_verification([1, 2])
 
         if action == 1:
-            print(f"\nPokémon with '{search_message}' naturally:")
+            print(f"\nPokémon with '{src_msg}' naturally:")
             for pokemon in data["pokemon"]:
                 if pokemon["is_hidden"] == False:
                     print(f"{pokemon["pokemon"]["name"]}")
                 
-            print(f"\nPokémon with '{search_message}' as a hidden ability:")
+            print(f"\nPokémon with '{src_msg}' as a hidden ability:")
             for pokemon in data["pokemon"]:
                 if pokemon["is_hidden"] == True:
                     print(f"{pokemon["pokemon"]["name"]}")
 
         if action == 2: #End search
-            print(f"Ending search on '{search_message}'")
+            print(f"Ending search on '{src_msg}'")
             break

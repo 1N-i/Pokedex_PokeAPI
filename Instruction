@@ -6,15 +6,6 @@ To Do:
         1.6- Make it work with megas and gigantamax
         1.7- Show bst (Base Stat Total)
 
-    3- Search by type with menu
-        3.2- Show moves of this type 
-        3.3- Menu for types interactions
-            3.2.1- Show "2x damage from and to:"
-            3.2.2- Show "1/2x damage from and to:"
-            3.2.3- Show "No damage from and to:"
-            3.2.4- Result should follow the example "fire -> grass -> water"
-        3.4- Search a pokémon by a secondary type
-
     4- Create the main Menu 
         4.2- Finalize styling 
         4.3- Interconnection between search systems 
@@ -22,11 +13,15 @@ To Do:
 
     5- Search move
         5.1- Show move description
+            5.1.1- Show power, accuracy, pp, type, 
+            5.1.2- If it exist: Show priority and stat changes
         5.2- Menu to see more options
             5.2.1- Show Pokémon that can have this move
 
 Next To Do:
-    3.2- Show moves of this type
+    5- Search move
+        5.2- Menu to see more options
+            5.2.1- Show Pokémon that can have this move
 
 Done: 
     1- Search Pokémon by name or ID 
@@ -45,6 +40,13 @@ Done:
     
     3- Search by type with menu
         3.1- Show which Pokémon have this type
+        3.2- Show moves of this type
+        3.3- Show types interactions
+            3.3.1- Show "2x damage from and to:"
+            3.3.2- Show "1/2x damage from and to:"
+            3.3.3- Show "No damage from and to:"
+            3.3.4- Result should follow the example "fire -> grass -> water"
+        3.4- Search pokémon by secondary type
 
     4- Create the main Menu 
         4.1- Include data verification in all options 
