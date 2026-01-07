@@ -47,9 +47,9 @@ def search_id_or_name(search): #Search Pokémon by name or ID
         search = search.lower()
 
     data = create_data("pokemon", search)
-    data_species = create_data("pokemon-species", search)
     if data == "error":
         return
+    data_species = create_data("pokemon-species", search)
 
     print(f"\nID: {data["id"]}") #ID
     print(f"Pokémon: {data["name"]}") #Name
@@ -67,7 +67,7 @@ def search_id_or_name(search): #Search Pokémon by name or ID
     print(f"First appearence in {gen_traslate(data_species["generation"]["name"])}")
 
     while True:
-        print("\nSelect: \n1- See moves \n2- See abilities \n3- See stats \n4- See pokédex descriptions \n5- End search\n")
+        print("\nSelect:\n1- See moves\n2- See abilities\n3- See base stats\n4- See pokédex descriptions\n5- End search\n")
         action = data_verification([1, 2, 3, 4, 5])
 
         if action == 1: #Show moves
@@ -81,10 +81,35 @@ def search_id_or_name(search): #Search Pokémon by name or ID
                 print(ability["ability"]["name"])
 
         if action == 3: #Show bst (Base Stat Total)
-            pass
+            print(f"\nBase stats of {data["name"]}:")
+            base_stat_total = []
+            for stat in data["stats"]:
+                print(f"{stat["stat"]["name"]}: {stat["base_stat"]}") #Each stats
+                base_stat_total.append(stat["base_stat"])
+
+            print(f"Base stat total: {sum(base_stat_total)}") #Total stats
 
         if action == 4: #Show pokedex descriptions
-            pass
+            all_entries = {}
+            for description in data_species["flavor_text_entries"]:
+                if description["language"]["name"] == "en":
+                    raw_entry = description["flavor_text"].replace("\n", " ")
+                    clean_entry = raw_entry.lower().strip().replace(".", "")
+                    game_version = description["version"]["name"]
+
+                    if clean_entry not in all_entries:
+                        all_entries[clean_entry] = {
+                            "text_to_show": raw_entry, 
+                            "versions": []
+                            }
+
+                    all_entries[clean_entry]["versions"].append(game_version)
+
+            for entry in all_entries:
+                text = all_entries[entry]["text_to_show"]
+                versions = ", ".join(all_entries[entry]["versions"])
+                print(f"\n[{versions}]:")
+                print(f"{text}")
 
         if action == 5: #End search
             print(f"\nEnding search on '{data["name"]}'")
@@ -119,7 +144,7 @@ def search_type(search): #Search specific type
 
             type1 = pokemon_list()
 
-            search2 = input("\nType: ")
+            search2 = input("\nSecond type: ")
             data = create_data("type", search2)
             if data == "error":
                 search_type(search)

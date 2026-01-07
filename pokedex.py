@@ -18,7 +18,7 @@ while True:
         search1 = input("\nName or ID: ")
         search_id_or_name(search1)
         
-    if e == 2: #Search specific type
+    if e == 2: #Search type
         search2 = input("\nType: ")
         search_type(search2)
         
@@ -26,7 +26,7 @@ while True:
         search3 = input("\nMove: ")
         search_move(search3)
 
-    if e == 4: #Search specific ability
+    if e == 4: #Search ability
         search4 = input("\nAbility name: ")
         search_ability(search4)
 
