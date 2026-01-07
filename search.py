@@ -12,13 +12,13 @@ def create_data(search_type, search): #Sends data to the functions that called i
 def data_verification(options): #Data verification
     while True:
         try:
-            action = int(input("Action: "))
+            action = int(input("Option: "))
             if action not in options:
                 raise ValueError
             return action
 
         except ValueError:
-            print("Invalid action\n")
+            print("Invalid option\n")
 
 #-------------------------------------------------------------
 def gen_traslate(generation):
@@ -46,42 +46,65 @@ def search_id_or_name(search): #Search Pokémon by name or ID
     if isinstance(search, str):
         search = search.lower()
 
-    data = create_data("pokemon", search)
-    if data == "error":
-        return
     data_species = create_data("pokemon-species", search)
+    if data_species == "error":
+        return
 
-    print(f"\nID: {data["id"]}") #ID
-    print(f"Pokémon: {data["name"]}") #Name
+    if len(data_species["varieties"]) != 1:
+        varieties = []
+        for variety in data_species["varieties"]:
+            varieties.append(variety["pokemon"]["name"])
+        for i in range(len(varieties)):
+            print(f"{i + 1}- {varieties[i].replace("-", " ")}")
+        a = i + 1
+        version = data_verification(range(1, a + 1))
+    else:
+        varieties = [search]
+        version = 1
+
+    data = create_data("pokemon", varieties[version - 1])
+    name = data["name"].replace("-", " ")
+
+    print(f"\nID: {data_species["id"]} \nPokémon: {name}") #ID and Name
 
     type1 = data["types"][0]["type"]["name"]
     type2 = data["types"][-1]["type"]["name"]
 
     if type1 == type2: #Mono-type
         print(f"Type: {type1}")
-
     else: #Dual-type
         print(f"Type: {type1}")
         print(f"Type: {type2}")
 
-    print(f"First appearence in {gen_traslate(data_species["generation"]["name"])}")
+    if "-alola" in data["name"]: #Alola regional version
+        print("First appearence in Alola, generation 7")
+    elif "-galar" in data["name"]: #Galar regional version
+        print("First appearence in Galar, generation 8")
+    elif "-paldea" in data["name"]: #Paldea regional version
+        print("First appearence in Paldea, generation 9")
+    else:
+        print(f"First appearence in {gen_traslate(data_species["generation"]["name"])}") #Region of origin
 
     while True:
         print("\nSelect:\n1- See moves\n2- See abilities\n3- See base stats\n4- See pokédex descriptions\n5- End search\n")
         action = data_verification([1, 2, 3, 4, 5])
 
         if action == 1: #Show moves
-            print(f"\nMoves that {data["name"]} can learn:")
+            print(f"\nMoves that {name} can learn:")
             for attack in data["moves"]:
-                print(attack["move"]["name"])
+                print(attack["move"]["name"].replace("-", " "))
+            print(f"That's {len(data["moves"])} moves")
 
         if action == 2: #Show hability
-            print(f"\nAbilities that {data["name"]} can have:")
+            print(f"\nAbilities that {name} can have:")
             for ability in data["abilities"]:
-                print(ability["ability"]["name"])
+                if ability["is_hidden"] == False:
+                    print(ability["ability"]["name"].replace("-", " "))
+                else:
+                    print(f"\nHidden abilities: \n{ability["ability"]["name"].replace("-", " ")}")
 
         if action == 3: #Show bst (Base Stat Total)
-            print(f"\nBase stats of {data["name"]}:")
+            print(f"\nBase stats of {name}:")
             base_stat_total = []
             for stat in data["stats"]:
                 print(f"{stat["stat"]["name"]}: {stat["base_stat"]}") #Each stats
@@ -92,7 +115,7 @@ def search_id_or_name(search): #Search Pokémon by name or ID
         if action == 4: #Show pokedex descriptions
             all_entries = {}
             for description in data_species["flavor_text_entries"]:
-                if description["language"]["name"] == "en":
+                if description["language"]["name"] == "en": #Get the english entries
                     raw_entry = description["flavor_text"].replace("\n", " ")
                     clean_entry = raw_entry.lower().strip().replace(".", "")
                     game_version = description["version"]["name"]
@@ -102,9 +125,7 @@ def search_id_or_name(search): #Search Pokémon by name or ID
                             "text_to_show": raw_entry, 
                             "versions": []
                             }
-
                     all_entries[clean_entry]["versions"].append(game_version)
-
             for entry in all_entries:
                 text = all_entries[entry]["text_to_show"]
                 versions = ", ".join(all_entries[entry]["versions"])
@@ -112,7 +133,7 @@ def search_id_or_name(search): #Search Pokémon by name or ID
                 print(f"{text}")
 
         if action == 5: #End search
-            print(f"\nEnding search on '{data["name"]}'")
+            print(f"\nEnding search on '{name}'")
             break
 
 #-------------------------------------------------------------
@@ -133,7 +154,8 @@ def search_type(search): #Search specific type
         if action == 1: #See pokémon
             print(f"\n{search} type pokémon:")
             for pokemon in data["pokemon"]:
-                print(pokemon["pokemon"]["name"])
+                print(pokemon["pokemon"]["name"].replace("-", " "))
+            print(f"That's {len(data["pokemon"])} Pokémon")
 
         if action == 2: #Search with secondary type
             def pokemon_list():
@@ -153,14 +175,18 @@ def search_type(search): #Search specific type
             type2 = pokemon_list()
 
             print(f"{search}:{search2} pokémon:")
+            total_pokemon = 0
             for a in type1:
                 for b in type2:
                     if a == b:
-                        print(b)
+                        print(b.replace("-", " "))
+                        total_pokemon += 1
+            print(f"That's {total_pokemon} Pokémon")
             
         if action == 3: #See moves
             for move in data["moves"]:
                 print(move["name"])
+            print(f"That's {len(data["moves"])} moves")
 
         if action == 4: #See type chart
             def chart(text):
@@ -187,7 +213,7 @@ def search_move(search):
     if data == "error":
         return
     
-    search = src_msg = data["name"]
+    search = src_msg = data["name"].replace("-", " ")
 
     effect = "None"
     short_effect = "None"
@@ -198,7 +224,7 @@ def search_move(search):
     elif data["flavor_text_entries"] != []:
         effect = data["flavor_text_entries"][0]["flavor_text"]
 
-    print(f"\nMove: {data["name"]}")
+    print(f"\nMove: {src_msg}")
     print(f"Effect: \n{effect}")
     print(f"\nShort effect: \n{short_effect}")
     print(f"\nDamage class: {data["damage_class"]["name"]}")
@@ -217,17 +243,17 @@ def search_move(search):
         stat_name = data["stat_changes"][0]["stat"]["name"]
         print(f"Stat changes: {change} {stat_name}")
     
-    print(f"Target: {data['target']['name']}\n")
+    print(f"Target: {data['target']['name'].replace("-", " ")}")
 
     while True:
-        print(f"Select: \n1- See pokémon that can learn {src_msg} \n2- End search")
+        print(f"\nSelect: \n1- See pokémon that can learn {src_msg} \n2- End search")
         action = data_verification([1, 2])
 
         if action == 1: #Pokémon that can learn the move
             print(f"\nPokémon that learns {src_msg}:")
             for pokemon in data["learned_by_pokemon"]:
                 print(pokemon["name"])
-            print()
+            print(f"That's {len(data["learned_by_pokemon"])} moves")
 
         if action == 2: #End search
             print(f"Ending search on '{src_msg}'")
@@ -247,23 +273,29 @@ def search_ability(search):  #Search ability
 
     for ability in data["effect_entries"]:
         if ability["language"]["name"] == "en":
-            print(f"Effect: \n{ability["effect"].replace("\n\n", "\n")}")
-            print(f"\nShort version: \n{ability["short_effect"].replace("\n\n", "\n")}")
+            print(f"Effect: \n{ability["effect"].replace("\n\n", " ")}".replace("  ", " "))
+            print(f"\nShort version: \n{ability["short_effect"].replace("\n\n", " ").replace("  ", " ")}")
 
     while True:
         print("\nSelect: \n1- See Pokémon with this ability \n2- End search\n")
         action = data_verification([1, 2])
 
-        if action == 1:
+        if action == 1: #Pokémon with the ability
             print(f"\nPokémon with '{src_msg}' naturally:")
+            ability_natural = 0
             for pokemon in data["pokemon"]:
                 if pokemon["is_hidden"] == False:
-                    print(f"{pokemon["pokemon"]["name"]}")
-                
+                    print(f"{pokemon["pokemon"]["name"].replace("-", " ")}")
+                    ability_natural += 1
+            print(f"That's {ability_natural} Pokémon")
+
             print(f"\nPokémon with '{src_msg}' as a hidden ability:")
+            hidden_ability = 0
             for pokemon in data["pokemon"]:
                 if pokemon["is_hidden"] == True:
-                    print(f"{pokemon["pokemon"]["name"]}")
+                    print(f"{pokemon["pokemon"]["name"].replace("-", " ")}")
+                    hidden_ability += 1
+            print(f"That's {hidden_ability} Pokémon")
 
         if action == 2: #End search
             print(f"Ending search on '{src_msg}'")

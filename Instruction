@@ -1,22 +1,14 @@
-To Do: 
-    1- Search Pokémon by name or ID 
-        1.5- Before showing any information ask which version of the pokémon
-            1.5.1- Other forms
-            1.5.2- Regional versions
-            1.5.3- Megas and gigantamax
-
-    4- Create the main Menu
-        4.2- Finalize styling
-            4.2.1- Counts every print of data["something"]
+To Do:
+    3- Search by type with menu
+        3.4- Search pokémon by secondary type
+            3.4.2- Rewrite the move to see Mono-Type
 
     8- Ensure it is all functional
 
 Next To Do:
-    1- Search Pokémon by name or ID 
-        1.5- Before showing any information ask which version of the pokémon
-            1.5.1- Other forms
-            1.5.2- Regional versions
-            1.5.3- Megas and gigantamax
+    3- Search by type with menu
+        3.4- Search pokémon by secondary type
+            3.4.2- Rewrite the move to see Mono-Type
 
 Done: 
     1- Search Pokémon by name or ID 
@@ -30,6 +22,10 @@ Done:
             1.4.2- Show abilities it can have
             1.4.3- Show bst (Base Stat Total)
             1.4.4- Show pokédex descriptions
+        1.5- Before showing any information ask which version of the pokémon
+            1.5.1- Other forms
+            1.5.2- Regional versions
+            1.5.3- Megas and gigantamax
 
     2- Search ability 
         2.1- Show ability description and the short version
@@ -48,7 +44,9 @@ Done:
             3.4.1- Solve bug on the "search" being switched by the secondary type
 
     4- Create the main Menu 
-        4.1- Include data verification in all options 
+        4.1- Include data verification in all options
+        4.2- Finalize styling
+            4.2.1- Counts every print of data["something"]
 
     5- Search move
         5.1- Show move description
