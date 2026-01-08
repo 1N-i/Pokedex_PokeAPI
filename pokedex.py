@@ -33,6 +33,6 @@ while True:
     if e == 5: #Random page
         random_page()
         
-    if e == 6:
-        print("Ending Program...") #End
+    if e == 6: #End Program
+        print("Ending Program...")
         break
