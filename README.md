@@ -30,3 +30,15 @@ The project is organized into specific archives:
 * `Guide`: A guide containing everything you can do, and what each archive does.
 
 ## 🚀 How to Run
+1. **Clone the repository:**
+   ```bash
+   git clone [https://github.com/seu-usuario/pokedex-python.git](https://github.com/seu-usuario/pokedex-python.git)
+   cd pokedex-python
+
+2. **Install dependencies:**
+   
+   This project uses the requests library. You can install it via pip: `pip install requests`
+
+4. **Execute the application:**
+
+   `python pokedex.py`
